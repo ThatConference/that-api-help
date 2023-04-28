@@ -6,6 +6,7 @@ import * as Sentry from '@sentry/node';
 import { security } from '@thatconference/api';
 import { isNil } from 'lodash';
 import DataLoader from 'dataloader';
+import helpPostStore from '../dataSources/cloudFirestore/helpPost';
 
 // Graph Types and Resolvers
 import typeDefs from './typeDefs';
@@ -69,10 +70,27 @@ const createServerParts = ({ dataSources, httpServer }) => {
   const createContext = async ({ req, res }) => {
     dlog('🚜 building graphql user context');
     dlog('🚜 assembling datasources');
-    // const { firestore } = dataSources;
+    const { firestore } = dataSources;
     let context = {
       dataSources: {
         ...dataSources,
+        helpPostLoader: new DataLoader(ids =>
+          helpPostStore(firestore)
+            .batchFindHelpPosts(ids)
+            .then(helpPosts => {
+              if (helpPosts.includes(null)) {
+                Sentry.withScope(scope => {
+                  scope.setLevel('error');
+                  scope.setContext('helpPost loader posts returned null', {
+                    ids,
+                    helpPosts,
+                  });
+                  Sentry.captureMessage('helpPost loader posts returned null');
+                });
+              }
+              return ids.map(i => helpPosts.find(p => p && p.id === i));
+            }),
+        ),
       },
     };
 

@@ -172,6 +172,29 @@ const helpPost = dbInstance => {
     };
   }
 
+  function batchFindHelpPosts(postIds) {
+    dlog('batchFindHelpPosts called on %d ids', postIds?.length);
+    if (!Array.isArray(postIds))
+      throw new Error('batchFindHelpPosts parameter must be an array');
+
+    const docRefs = postIds.map(id => helpPostCol.doc(id));
+    if (docRefs.length < 1) return [];
+
+    return dbInstance.getAll(...docRefs).then(docSnaps =>
+      docSnaps.map(r => {
+        let result = null;
+        if (r.exists) {
+          result = {
+            id: r.id,
+            ...r.data(),
+          };
+        }
+
+        return helpPostDateForge(result);
+      }),
+    );
+  }
+
   function create({ newHelpPost, memberId }) {
     dlog('create new post by %d', memberId);
     const scrubbedHelpPost = scrubHelpPost({
@@ -204,6 +227,7 @@ const helpPost = dbInstance => {
     get,
     getAllPaged,
     getByMemberPaged,
+    batchFindHelpPosts,
     create,
     update,
   };
