@@ -4,6 +4,7 @@ import { fieldResolvers as helpFields } from './help';
 import { fieldResolvers as helpPostFields } from './helpPost';
 import { fieldResolvers as helpPostsFields } from './helpPosts';
 import { fieldResolvers as meHelpFields } from './meHelp';
+import { fieldResolvers as helpPostQueryFields } from './helpPostQuery';
 import { fieldResolvers as helpPostCommentFields } from './helpPostComment';
 
 export default {
@@ -15,5 +16,6 @@ export const fieldResolvers = {
   ...helpPostFields,
   ...helpPostsFields,
   ...meHelpFields,
+  ...helpPostQueryFields,
   ...helpPostCommentFields,
 };

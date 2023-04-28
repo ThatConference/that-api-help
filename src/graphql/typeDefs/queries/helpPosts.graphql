@@ -2,5 +2,5 @@ type HelpPostsQuery {
   "All help posts paged"
   all(pageSize: Int, cursor: String): PagedHelpPosts!
   "A specific help post"
-  post(postId: ID!): HelpPost
+  post(postId: ID!): HelpPostQuery
 }
