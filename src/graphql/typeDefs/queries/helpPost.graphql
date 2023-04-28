@@ -1,0 +1,6 @@
+type HelpPostQuery {
+  "get the current helpPost"
+  get: HelpPost
+  "get paged comments for curren helpPost"
+  comments(pageSize: Int, cursor: String): PagedHelpPostComments!
+}
