@@ -1,0 +1,16 @@
+type HelpPostComment {
+  "comment's id"
+  id: ID!
+  "HelpPost this comment is for"
+  helpPost: HelpPost
+  "comment text"
+  text: String!
+  "Who submitted this comment"
+  createdBy: PublicProfile
+  "when comment was created"
+  createdAt: Date!
+  "when this comment was last updated"
+  lastUpdatedAt: Date!
+  "Comment is flagged as inappropriate"
+  isFlagged: Boolean!
+}

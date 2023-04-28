@@ -1,0 +1,4 @@
+type HelpPostCommentsMutation {
+  comment(commentId: ID!): HelpPostCommentMutation
+  create(comment: HelpPostCommentCreateInput!): HelpPostComment
+}

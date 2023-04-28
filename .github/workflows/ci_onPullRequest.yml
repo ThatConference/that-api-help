@@ -1,0 +1,16 @@
+name: CI on Pull Request
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Build Help API
+    uses: thatconference/that-gh-actions/.github/workflows/build-validate-api.yml@main
+    with:
+      apiName: api
+      isForDeploy: false
+      branchName: ${{ github.ref_name }}
+      nodeVersion: 18
+    secrets:
+      SLACK_WEBHOOK_DEV_NOTIFICATIONS: ${{ secrets.SLACK_WEBHOOK_DEV_NOTIFICATIONS }}

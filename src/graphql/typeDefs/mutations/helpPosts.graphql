@@ -1,0 +1,6 @@
+type HelpPostsMutation {
+  "Mutate a specific help post"
+  helpPost(postId: ID!): HelpPostMutation @auth(requires: "members")
+  "Create a new help post"
+  create(helpPost: HelpPostCreateInput!): HelpPost @auth(requires: "members")
+}

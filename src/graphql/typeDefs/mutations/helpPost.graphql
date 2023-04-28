@@ -1,0 +1,4 @@
+type HelpPostMutation {
+  update(helpPost: HelpPostUpdateInput!): HelpPost @auth(requires: "members")
+  comments: HelpPostCommentsMutation @auth(requires: "members")
+}

@@ -1,0 +1,3 @@
+type HelpMutation {
+  posts: HelpPostsMutation @auth(requires: "members")
+}

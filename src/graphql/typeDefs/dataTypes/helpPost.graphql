@@ -1,0 +1,24 @@
+type HelpPost {
+  "unique identifier for post"
+  id: ID!
+  "Title for post"
+  title: String!
+  "body of the post"
+  body: String!
+  "The type of help post (enum)"
+  helpType: HelpPostType!
+  "Who sumbmitted this post"
+  createdBy: PublicProfile!
+  "The date the post was created"
+  createdAt: Date!
+  "The date the post was last updated on"
+  lastUpdatedAt: Date!
+  "Current status of this post"
+  status: HelpPostStatus!
+  "Tags describing the post's meaning"
+  tags: [String]!
+  "This post is flagged as inappropriate"
+  isFlagged: Boolean!
+  "comments for this post (paged, default 20)"
+  comments(pageSize: Int, cursor: String): PagedHelpPostComments!
+}

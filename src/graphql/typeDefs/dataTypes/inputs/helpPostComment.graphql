@@ -1,0 +1,9 @@
+input HelpPostCommentCreateInput {
+  "comment text"
+  text: String!
+}
+
+input HelpPostCommentUpdateInput {
+  "comment text"
+  text: String!
+}

@@ -1,0 +1,6 @@
+type HelpQuery {
+  "Help Posts"
+  posts: HelpPostsQuery
+  "My Help contributions"
+  me: MeHelpQuery @auth(requires: "members")
+}

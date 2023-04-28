@@ -1,0 +1,6 @@
+enum HelpPostType {
+  "Session, abstract, talk, etc."
+  SESSION
+  "personal biography"
+  PERSONAL_BIO
+}

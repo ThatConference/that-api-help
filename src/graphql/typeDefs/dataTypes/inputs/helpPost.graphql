@@ -1,0 +1,25 @@
+input HelpPostCreateInput {
+  "Title for post"
+  title: String!
+  "body of the post"
+  body: String!
+  "The type of help post (enum)"
+  helpType: HelpPostType!
+  "Current status of this post"
+  status: HelpPostStatus
+  "Tags describing the post's meaning"
+  tags: [String]!
+}
+
+input HelpPostUpdateInput {
+  "Title for post"
+  title: String
+  "body of the post"
+  body: String
+  "The type of help post (enum)"
+  helpType: HelpPostType
+  "Current status of this post"
+  status: HelpPostStatus
+  "Tags describing the post's meaning"
+  tags: [String!]
+}

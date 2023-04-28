@@ -1,0 +1,8 @@
+enum HelpPostStatus {
+  "Open for comments"
+  OPEN
+  "Closed for comments"
+  CLOSED
+  "Hide from "
+  HIDDEN
+}
