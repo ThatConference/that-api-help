@@ -1,3 +1,4 @@
 type Mutation {
+  "where help mutation begins"
   help: HelpMutation @auth(requires: "members")
 }

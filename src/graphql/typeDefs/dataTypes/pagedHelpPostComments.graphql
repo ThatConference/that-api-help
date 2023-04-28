@@ -2,7 +2,7 @@ type PagedHelpPostComments {
   "value to pass back for more paged data"
   cursor: String!
   "number of records in current page"
-  count: Int
+  count: Int!
   "Posts in this page of data"
   comments: [HelpPostComment]!
 }

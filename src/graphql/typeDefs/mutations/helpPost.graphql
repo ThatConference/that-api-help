@@ -1,4 +1,6 @@
 type HelpPostMutation {
+  "update the current helpPost"
   update(helpPost: HelpPostUpdateInput!): HelpPost @auth(requires: "members")
+  "focus on a specifc comment for the current helpPost"
   comments: HelpPostCommentsMutation @auth(requires: "members")
 }

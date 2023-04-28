@@ -7,7 +7,7 @@ const memberStore = dataSources.cloudFirestore.member;
 export const fieldResolvers = {
   HelpQuery: {
     posts: () => ({}),
-    me: (_, __, { dataSoruces: { firestore }, user }) => {
+    me: (_, __, { dataSources: { firestore }, user }) => {
       dlog('me help path for %o', user);
       return memberStore(firestore)
         .get(user.sub)

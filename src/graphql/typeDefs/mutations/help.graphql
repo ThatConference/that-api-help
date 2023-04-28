@@ -1,3 +1,4 @@
 type HelpMutation {
+  "helpPost mutation path"
   posts: HelpPostsMutation @auth(requires: "members")
 }

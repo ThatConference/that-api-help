@@ -1,3 +1,7 @@
 type MeHelpQuery {
-  posts: PagedHelpPosts! @auth(requires: "members")
+  "my posts path of help (default pageSize: 20)"
+  posts(pageSize: Int, cursor: String): PagedHelpPosts!
+    @auth(requires: "members")
+  "All comments submitted by this user"
+  comments(pageSize: Int, cursor: String): PagedHelpPostComments!
 }

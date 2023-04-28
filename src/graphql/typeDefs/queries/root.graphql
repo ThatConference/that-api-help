@@ -1,3 +1,4 @@
 type Query {
+  "Where help query begins"
   help: HelpQuery
 }

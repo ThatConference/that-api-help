@@ -1,4 +1,5 @@
 type HelpPostCommentMutation {
   "Update current set comment"
   update(comment: HelpPostCommentUpdateInput!): HelpPostComment!
+    @auth(requires: "members")
 }

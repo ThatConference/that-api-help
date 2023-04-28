@@ -4,7 +4,7 @@ import { utility } from '@thatconference/api';
 
 const dlog = debug('that:api:help:datasources:firebase:helpPost');
 const collectionName = 'helpPosts';
-const subCollectionName = 'comments';
+const subCollectionName = 'helpPostComments';
 const { entityDateForge } = utility.firestoreDateForge;
 const fields = ['createdAt', 'lastUpdatedAt'];
 const helpPostCommentDateForge = entityDateForge({ fields });
@@ -115,6 +115,74 @@ const helpPostComment = dbInstance => {
     };
   }
 
+  async function findAllCommentsForMember({ memberId, pageSize = 20, cursor }) {
+    dlog(
+      'findAllCommentsForMember called for %s, pageSize: %d',
+      memberId,
+      pageSize,
+    );
+    let query = dbInstance
+      .collectionGroup(subCollectionName)
+      .orderBy('createdAt', 'desc')
+      .where('createdBy', '==', memberId)
+      .limit(pageSize);
+
+    if (cursor) {
+      const cursorObject = Buffer.from(cursor, 'base64').toString('utf8');
+      dlog('🚰 cursorObject %o', cursorObject);
+      let curCreatedAt;
+      let curMember;
+      try {
+        ({ curCreatedAt, curMember } = JSON.parse(cursorObject));
+      } catch (err) {
+        Sentry.setTags({
+          rawCursor: cursor,
+          cursor: cursorObject,
+        });
+        const sentryId = Sentry.captureException(err);
+        throw new Error('Invalid cursor provided (%d)', sentryId);
+      }
+      if (curMember !== memberId)
+        throw new Error('invalid cursor provided (mid)');
+
+      const startAfterDate = new Date(curCreatedAt);
+      if (!isValidDate(startAfterDate)) {
+        Sentry.setTags({
+          rawCursor: cursor,
+          cursor: cursorObject,
+        });
+        throw new Error('Invalid cursor provided (date)');
+      }
+      query = query.startAfter(startAfterDate);
+    }
+    const { size, docs } = await query.get();
+    dlog('found %d helpPost comments for member %s', size, memberId);
+
+    const comments = docs.map(d => {
+      const r = {
+        id: d.id,
+        ...d.data(),
+      };
+      return helpPostCommentDateForge(r);
+    });
+
+    const lastComment = comments[comments.length - 1];
+    let newCursor = '';
+    if (lastComment && comments.length >= pageSize) {
+      dlog('lastComment:: %o', lastComment);
+      // one millisecond needs to be removed from descending timestamp paging
+      const curCreatedAt = new Date(lastComment.createdAt.getTime() - 1);
+      const cpieces = JSON.stringify({ curCreatedAt, curMember: memberId });
+      newCursor = Buffer.from(cpieces, 'utf8').toString('base64');
+    }
+
+    return {
+      comments,
+      cursor: newCursor,
+      count: comments.length,
+    };
+  }
+
   function create({ postId, newComment, memberId }) {
     dlog('create new comment on post %s by member %s', postId, memberId);
     const cleanComment = scrubHelpPostComment({
@@ -123,7 +191,6 @@ const helpPostComment = dbInstance => {
       memberId,
     });
     cleanComment.helpPostId = postId;
-    cleanComment.helpPostRef = helpPostCol.doc(postId);
     return helpPostCol
       .doc(postId)
       .collection(subCollectionName)
@@ -155,6 +222,7 @@ const helpPostComment = dbInstance => {
     get,
     findAllForPostPaged,
     create,
+    findAllCommentsForMember,
     update,
   };
 };

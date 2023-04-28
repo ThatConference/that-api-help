@@ -1,4 +1,7 @@
 type HelpPostCommentsMutation {
+  "focus on a specifc comment for the current helpPost"
   comment(commentId: ID!): HelpPostCommentMutation
+  "create a new comment for the current helpPost"
   create(comment: HelpPostCommentCreateInput!): HelpPostComment
+    @auth(requires: "members")
 }
