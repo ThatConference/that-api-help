@@ -16,5 +16,6 @@ export const fieldResolvers = {
         pageSize,
         cursor,
       }),
+    commentCount: ({ commentCount }) => commentCount ?? 0,
   },
 };
