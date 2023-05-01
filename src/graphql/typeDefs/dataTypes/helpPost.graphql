@@ -21,4 +21,6 @@ type HelpPost {
   isFlagged: Boolean!
   "comments for this post (paged, default 20)"
   comments(pageSize: Int, cursor: String): PagedHelpPostComments!
+  "A calculated field value via a firebase trigger"
+  commentCount: Int!
 }
