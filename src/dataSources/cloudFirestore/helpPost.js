@@ -91,7 +91,7 @@ const helpPost = dbInstance => {
 
     const lastPost = posts[posts.length - 1];
     let newCursor = '';
-    if (lastPost) {
+    if (lastPost && posts.length >= pageSize) {
       dlog('lastPost:: %o', lastPost);
       // one millisecond needs to be removed from descending timestamp paging
       const curLastUpdatedAt = new Date(lastPost.lastUpdatedAt.getTime() - 1);
@@ -158,7 +158,7 @@ const helpPost = dbInstance => {
 
     const lastPost = posts[posts.length - 1];
     let newCursor = '';
-    if (lastPost) {
+    if (lastPost && posts.length >= pageSize) {
       dlog('lastPost:: %o', lastPost);
       const curCreatedAt = new Date(lastPost.createdAt);
       const cpieces = JSON.stringify({ curCreatedAt, curMember: memberId });
